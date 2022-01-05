@@ -53,7 +53,7 @@ if __name__ == '__main__':
         frames = {}
         time_frames = list(range(number_of_frames))
         # Workers needs its own list since it converts the elements from ints to future objects
-        workers = time_frames
+        workers = list(range(number_of_frames))
         # Start the workers
         for i in workers:
             if i == 0:
