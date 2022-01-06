@@ -95,9 +95,9 @@ if __name__ == '__main__':
         # Display the information
         if type5p[str(i)]["p"] == [True, True, True]:
             with open("lower2middle.txt", "a+") as f:
-                f.write(str(type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["fc"][1]) + " " + str(type5p[str(i)]["id"]) + "\n")
+                f.write(str(type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["fc"][1]) + " " + str(type5p[str(i)]["fc"][1] - type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["id"]) + "\n")
             with open("lower2upper.txt", "a+") as f:
-                f.write(str(type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["fc"][2]) + " " + str(type5p[str(i)]["id"]) + "\n")
+                f.write(str(type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["fc"][2]) + " " + str(type5p[str(i)]["fc"][2] - type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["id"]) + "\n")
             #print(type5p[str(i)])
             print("Atom " +str(type5p[str(i)]["id"]) + " passed " + str(lower_bound) + " at FC: " + str(type5p[str(i)]["fc"][0]) + " with a Z of " + str(type5p[str(i)]["z"][0]))
             print("Atom " + str(type5p[str(i)]["id"]) + " passed " + str(middle_bound) + " at FC: " + str(type5p[str(i)]["fc"][1]) + " with a Z of " + str(type5p[str(i)]["z"][1]))
