@@ -3,7 +3,7 @@ import concurrent.futures as cf
 
 #simulation vars
 number_of_type = 5
-number_of_frames = 10
+number_of_frames = 1000
 lower_bound = 349.5
 middle_bound = 390.5
 upper_bound = 410.5
