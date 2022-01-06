@@ -8,20 +8,6 @@ lower_bound = 349.5
 middle_bound = 390.5
 upper_bound = 410.5
 
-
-
-# Added before I knew what data I needed, didn't use these vars
-atoms = 148026
-radius = 46.2
-cyl_length = 40
-res_length = 350
-bins = 100
-xmax = 0
-xmin = 46.2
-pheight = 0.995
-pore_center = [100.0, 100.0]
-
-
 # Function to load the data from the lammpstrj dump
 # It is setup to be multi threaded for faster loading of data
 def frame(framescount, startline, endline):
@@ -31,15 +17,15 @@ def frame(framescount, startline, endline):
         for lines in lines_gen:
             lines = lines.split()
             if framescount == 0:
-                if int(lines[2]) == 5 and float(lines[5]) < lower_bound:
+                if int(lines[2]) == number_of_type and float(lines[5]) < lower_bound:
                     chunked_data["fc"].append(framescount)
                     chunked_data["id"].append(int(lines[0]))
                     chunked_data["z"].append(float(lines[5]))
-            elif int(lines[2]) == 5:
+            elif int(lines[2]) == number_of_type:
                 chunked_data["fc"].append(framescount)
                 chunked_data["id"].append(int(lines[0]))
                 chunked_data["z"].append(float(lines[5]))
-        #print(chunked_data)
+        print(str(framescount + 1) + "/" + str(number_of_frames) + " frames loaded")
     return chunked_data
 
 # Required for multithreading
@@ -64,6 +50,7 @@ if __name__ == '__main__':
         # Return data from threaded workers (chunked_data to frames)
     for i in time_frames:
         frames[str(i)] = workers[i].result()
+
     type5s = {}
     for i, id in enumerate(frames["0"]["id"]):
         type5 = {"id": id, "z": [], "fc": []}
@@ -77,7 +64,7 @@ if __name__ == '__main__':
     count = 0
     for i in range(0, end):
         # Filters out any of the atoms that didn't make it to 410.5 with a sanity check to make sure that duplicates aren't added
-        if max(type5s[str(i)]["z"]) >= upper_bound and type5f.get(str(i)) == None:
+        if max(type5s[str(i)]["z"]) >= upper_bound and type5f.get(str(i)) is None:
             type5f[str(count)] = type5s[str(i)]
             count = count + 1
 
@@ -107,6 +94,10 @@ if __name__ == '__main__':
                 #print("ID: " + str(id) + " passed 410.5 at FC: " + str(fc) + " with a z of: " + str(z))
         # Display the information
         if type5p[str(i)]["p"] == [True, True, True]:
+            with open("lower2middle.txt", "w") as f:
+                f.write(str(type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["fc"][1]) + " " + str(type5p[str(i)]["id"]))
+            with open("lower2upper.txt", "w") as f:
+                f.write(str(type5p[str(i)]["fc"][0]) + " " + str(type5p[str(i)]["fc"][2]) + " " + str(type5p[str(i)]["id"]))
             #print(type5p[str(i)])
             print("Atom " +str(type5p[str(i)]["id"]) + " passed " + str(lower_bound) + " at FC: " + str(type5p[str(i)]["fc"][0]) + " with a Z of " + str(type5p[str(i)]["z"][0]))
             print("Atom " + str(type5p[str(i)]["id"]) + " passed " + str(middle_bound) + " at FC: " + str(type5p[str(i)]["fc"][1]) + " with a Z of " + str(type5p[str(i)]["z"][1]))
